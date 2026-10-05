@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Workout
+from .models import Workout, WorkoutTemplate
 from .forms import WorkoutForm
 
 # Create your views here.
@@ -11,15 +11,32 @@ def workout_list(request):
 
 # view to add a workout
 def add_workout(request):
-    
+
     # request method POST when user fills and submits form
     if request.method == 'POST':
         form = WorkoutForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('workout_list')
-        
-    # requst method GET renders a balnk form and renders it
+
+    # request method GET renders a blank form
     else:
         form = WorkoutForm()
     return render(request, 'tracker/add_workout.html', {'form': form})
+
+# view that asks how many days per week the user wants to train
+def choose_days(request):
+    return render(request, 'tracker/choose_days.html', {'options': range(2, 7)})
+
+# view that lists the workout templates for the chosen number of days
+def template_list(request, days):
+    if not 2 <= days <= 6:
+        return redirect('choose_days')
+    templates = WorkoutTemplate.objects.filter(
+        days_per_week=days
+    ).prefetch_related('exercises')
+    return render(
+        request,
+        'tracker/template_list.html',
+        {'days': days, 'templates': templates},
+    )

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ days }}-Day Templates</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: #1a1a2e;
+      }
+      .back-link {
+        color: #4361ee;
+        text-decoration: none;
+        font-size: 0.95rem;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.2rem;
+        margin-top: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      .card h2 {
+        color: #1a1a2e;
+        margin-bottom: 0.3rem;
+      }
+      .card p {
+        color: #666;
+        font-size: 0.9rem;
+      }
+      .card h3 {
+        margin-top: 1rem;
+        color: #4361ee;
+        font-size: 1rem;
+      }
+      .card ul {
+        margin: 0.3rem 0 0 1.2rem;
+        font-size: 0.95rem;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ days }}-day workout templates</h1>
+      <a class="back-link" href="{% url 'choose_days' %}">← Change days</a>
+
+      {% for template in templates %}
+      <div class="card">
+        <h2>{{ template.name }}</h2>
+        <p>{{ template.description }}</p>
+        {% regroup template.exercises.all by day_number as day_groups %} 
+        {% for group in day_groups%}
+        <h3>
+          Day {{ group.grouper }}{% if group.list.0.day_name %} - {{
+          group.list.0.day_name }}{% endif %}
+        </h3>
+        <ul>
+          {% for ex in group.list %}
+          <li>{{ ex.name }} - {{ ex.sets }} x {{ ex.reps }}</li>
+          {% endfor %}
+        </ul>
+        {% endfor %}
+      </div>
+      {% empty %}
+      <div class="empty-state">
+        <p>No templates for {{ days }} days yet.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choose Your Training Days</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: #1a1a2e;
+      }
+      p {
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+      .days-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: center;
+      }
+      .day-btn {
+        background: white;
+        color: #4361ee;
+        border: 2px solid #4361ee;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-decoration: none;
+        min-width: 90px;
+      }
+      .day-btn:hover {
+        background: #4361ee;
+        color: white;
+      }
+      .skip {
+        display: inline-block;
+        margin-top: 2rem;
+        color: #4361ee;
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>How many days a week do you want to train?</h1>
+      <p>Pick one and we'll show you matching workout templates.</p>
+      <div class="days-grid">
+        {% for n in options %}
+        <a class="day-btn" href="{% url 'template_list' n %}">{{ n }}</a>
+        {% endfor %}
+      </div>
+      <a class="skip" href="{% url 'workout_list' %}">Go to my workout log →</a>
+    </div>
+  </body>
+</html>
